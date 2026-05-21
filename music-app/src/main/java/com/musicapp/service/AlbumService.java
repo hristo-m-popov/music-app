@@ -15,7 +15,6 @@ import com.musicapp.repository.ArtistRepository;
 public class AlbumService {
 
     private final AlbumRepository albumRepository;
-    private final ArtistRepository artistRepository;
 
     public Page<Album> getAllAlbums(Pageable pageable) {
         return albumRepository.findAll(pageable);

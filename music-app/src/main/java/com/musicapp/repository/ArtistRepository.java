@@ -16,5 +16,6 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
     Page<Artist> findByGenreContainingIgnoreCaseAndCountryContainingIgnoreCase(
             String genre, String country, Pageable pageable);
 
+
     Page<Artist> findAll(Pageable pageable);
 }

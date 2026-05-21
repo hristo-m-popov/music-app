@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Concerts - Music App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/artists">🎵 Music App</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/artists">Artists</a>
+            <a class="nav-link" href="/albums">Albums</a>
+            <a class="nav-link" href="/concerts">Concerts</a>
+            <a class="nav-link" href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Concerts</h2>
+        <a href="/concerts/new" class="btn btn-dark">+ Add Concert</a>
+    </div>
+
+    <form method="get" action="/concerts" class="row g-2 mb-4">
+        <div class="col-md-4">
+            <input type="text" name="city" class="form-control"
+                   placeholder="Search by city..." th:value="${city}">
+        </div>
+        <div class="col-md-3">
+            <select name="status" class="form-select">
+                <option value="">-- Any Status --</option>
+                <option value="Upcoming" th:selected="${status == 'Upcoming'}">Upcoming</option>
+                <option value="Completed" th:selected="${status == 'Completed'}">Completed</option>
+                <option value="Cancelled" th:selected="${status == 'Cancelled'}">Cancelled</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="sortBy" class="form-select">
+                <option value="concertDateTime" th:selected="${sortBy == 'concertDateTime'}">Date</option>
+                <option value="city" th:selected="${sortBy == 'city'}">City</option>
+                <option value="ticketPrice" th:selected="${sortBy == 'ticketPrice'}">Price</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <select name="direction" class="form-select">
+                <option value="asc" th:selected="${direction == 'asc'}">↑</option>
+                <option value="desc" th:selected="${direction == 'desc'}">↓</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-dark w-100">Search</button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover bg-white">
+            <thead class="table-dark">
+            <tr>
+                <th>Artist</th>
+                <th>City</th>
+                <th>Venue</th>
+                <th>Date & Time</th>
+                <th>Ticket Price</th>
+                <th>Capacity</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="concert : ${concerts.content}">
+                <td th:text="${concert.artist.name}"></td>
+                <td th:text="${concert.city}"></td>
+                <td th:text="${concert.venue}"></td>
+                <td th:text="${concert.concertDateTime}"></td>
+                <td th:text="${'$' + concert.ticketPrice}"></td>
+                <td th:text="${concert.capacity}"></td>
+                <td>
+                        <span th:text="${concert.status}"
+                              th:classappend="${concert.status == 'Upcoming'} ? 'bg-success' :
+                                             (${concert.status == 'Cancelled'} ? 'bg-danger' : 'bg-secondary')"
+                              class="badge"></span>
+                </td>
+                <td>
+                    <a th:href="@{/concerts/{id}/edit(id=${concert.id})}"
+                       class="btn btn-sm btn-outline-dark">Edit</a>
+                    <a th:href="@{/concerts/{id}/delete(id=${concert.id})}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+            <tr th:if="${concerts.content.empty}">
+                <td colspan="8" class="text-center text-muted">No concerts found.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <nav th:if="${concerts.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${concerts.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/concerts(page=${concerts.number - 1},
+                   city=${city}, status=${status},
+                   sortBy=${sortBy}, direction=${direction})}">Previous</a>
+            </li>
+            <li class="page-item"
+                th:each="i : ${#numbers.sequence(0, concerts.totalPages - 1)}"
+                th:classappend="${i == concerts.number} ? 'active'">
+                <a class="page-link" th:href="@{/concerts(page=${i},
+                   city=${city}, status=${status},
+                   sortBy=${sortBy}, direction=${direction})}"
+                   th:text="${i + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${concerts.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/concerts(page=${concerts.number + 1},
+                   city=${city}, status=${status},
+                   sortBy=${sortBy}, direction=${direction})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

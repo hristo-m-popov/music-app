@@ -58,17 +58,22 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/login", "/css/**", "/js/**", "/webjars/**").permitAll()
+                        .requestMatchers("/artists/new", "/artists/*/edit", "/artists/*/delete", "/artists/save").hasRole("ADMIN")
+                        .requestMatchers("/albums/new", "/albums/*/edit", "/albums/*/delete", "/albums/save").hasRole("ADMIN")
+                        .requestMatchers("/concerts/new", "/concerts/*/edit", "/concerts/*/delete", "/concerts/save").hasRole("ADMIN")
+                        .requestMatchers("/api/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/artists", true)
                         .permitAll())
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl("/login?logout")
                         .permitAll())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

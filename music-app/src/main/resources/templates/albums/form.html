@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Album Form - Music App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/artists">🎵 Music App</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/artists">Artists</a>
+            <a class="nav-link" href="/albums">Albums</a>
+            <a class="nav-link" href="/concerts">Concerts</a>
+            <a class="nav-link" href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0" th:text="${album.id == null} ? 'Add New Album' : 'Edit Album'"></h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/albums/save">
+                        <input type="hidden" name="id" th:value="${album.id}">
+
+                        <div class="mb-3">
+                            <label class="form-label">Artist *</label>
+                            <select name="artist.id" class="form-select" required>
+                                <option value="">-- Select Artist --</option>
+                                <option th:each="artist : ${artists}"
+                                        th:value="${artist.id}"
+                                        th:text="${artist.name}"
+                                        th:selected="${album.artist != null and album.artist.id == artist.id}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Title *</label>
+                            <input type="text" name="title" class="form-control"
+                                   th:value="${album.title}" maxlength="150" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Release Date *</label>
+                            <input type="date" name="releaseDate" class="form-control"
+                                   th:value="${album.releaseDate}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Track Count *</label>
+                            <input type="number" name="trackCount" class="form-control"
+                                   th:value="${album.trackCount}" min="1" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Duration (minutes) *</label>
+                            <input type="number" name="durationMinutes" class="form-control"
+                                   th:value="${album.durationMinutes}" min="1" step="0.1" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Record Label</label>
+                            <input type="text" name="recordLabel" class="form-control"
+                                   th:value="${album.recordLabel}" maxlength="100">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Price *</label>
+                            <input type="number" name="price" class="form-control"
+                                   th:value="${album.price}" min="0" step="0.01" required>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-dark">Save</button>
+                            <a href="/albums" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

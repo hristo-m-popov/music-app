@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Concert Form - Music App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/artists">🎵 Music App</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/artists">Artists</a>
+            <a class="nav-link" href="/albums">Albums</a>
+            <a class="nav-link" href="/concerts">Concerts</a>
+            <a class="nav-link" href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0" th:text="${concert.id == null} ? 'Add New Concert' : 'Edit Concert'"></h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/concerts/save">
+                        <input type="hidden" name="id" th:value="${concert.id}">
+
+                        <div class="mb-3">
+                            <label class="form-label">Artist *</label>
+                            <select name="artist.id" class="form-select" required>
+                                <option value="">-- Select Artist --</option>
+                                <option th:each="artist : ${artists}"
+                                        th:value="${artist.id}"
+                                        th:text="${artist.name}"
+                                        th:selected="${concert.artist != null and concert.artist.id == artist.id}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">City *</label>
+                            <input type="text" name="city" class="form-control"
+                                   th:value="${concert.city}" maxlength="100" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Venue *</label>
+                            <input type="text" name="venue" class="form-control"
+                                   th:value="${concert.venue}" maxlength="150" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Date & Time *</label>
+                            <input type="datetime-local" name="concertDateTime"
+                                   class="form-control"
+                                   th:value="${concert.concertDateTime}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ticket Price *</label>
+                            <input type="number" name="ticketPrice" class="form-control"
+                                   th:value="${concert.ticketPrice}"
+                                   min="0" step="0.01" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Capacity *</label>
+                            <input type="number" name="capacity" class="form-control"
+                                   th:value="${concert.capacity}" min="1" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Status *</label>
+                            <select name="status" class="form-select" required>
+                                <option value="">-- Select Status --</option>
+                                <option value="Upcoming"
+                                        th:selected="${concert.status == 'Upcoming'}">Upcoming</option>
+                                <option value="Completed"
+                                        th:selected="${concert.status == 'Completed'}">Completed</option>
+                                <option value="Cancelled"
+                                        th:selected="${concert.status == 'Cancelled'}">Cancelled</option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-dark">Save</button>
+                            <a href="/concerts" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

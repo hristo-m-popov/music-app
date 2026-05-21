@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Albums - Music App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/artists">🎵 Music App</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/artists">Artists</a>
+            <a class="nav-link" href="/albums">Albums</a>
+            <a class="nav-link" href="/concerts">Concerts</a>
+            <a class="nav-link" href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Albums</h2>
+        <a href="/albums/new" class="btn btn-dark">+ Add Album</a>
+    </div>
+
+    <form method="get" action="/albums" class="row g-2 mb-4">
+        <div class="col-md-4">
+            <input type="text" name="title" class="form-control"
+                   placeholder="Search by title..." th:value="${title}">
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="recordLabel" class="form-control"
+                   placeholder="Search by record label..." th:value="${recordLabel}">
+        </div>
+        <div class="col-md-2">
+            <select name="sortBy" class="form-select">
+                <option value="title" th:selected="${sortBy == 'title'}">Title</option>
+                <option value="releaseDate" th:selected="${sortBy == 'releaseDate'}">Release Date</option>
+                <option value="price" th:selected="${sortBy == 'price'}">Price</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <select name="direction" class="form-select">
+                <option value="asc" th:selected="${direction == 'asc'}">↑</option>
+                <option value="desc" th:selected="${direction == 'desc'}">↓</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-dark w-100">Search</button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover bg-white">
+            <thead class="table-dark">
+            <tr>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Release Date</th>
+                <th>Tracks</th>
+                <th>Duration (min)</th>
+                <th>Label</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="album : ${albums.content}">
+                <td th:text="${album.title}"></td>
+                <td th:text="${album.artist.name}"></td>
+                <td th:text="${album.releaseDate}"></td>
+                <td th:text="${album.trackCount}"></td>
+                <td th:text="${album.durationMinutes}"></td>
+                <td th:text="${album.recordLabel}"></td>
+                <td th:text="${'$' + album.price}"></td>
+                <td>
+                    <a th:href="@{/albums/{id}/edit(id=${album.id})}"
+                       class="btn btn-sm btn-outline-dark">Edit</a>
+                    <a th:href="@{/albums/{id}/delete(id=${album.id})}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+            <tr th:if="${albums.content.empty}">
+                <td colspan="8" class="text-center text-muted">No albums found.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <nav th:if="${albums.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${albums.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/albums(page=${albums.number - 1},
+                   title=${title}, recordLabel=${recordLabel},
+                   sortBy=${sortBy}, direction=${direction})}">Previous</a>
+            </li>
+            <li class="page-item"
+                th:each="i : ${#numbers.sequence(0, albums.totalPages - 1)}"
+                th:classappend="${i == albums.number} ? 'active'">
+                <a class="page-link" th:href="@{/albums(page=${i},
+                   title=${title}, recordLabel=${recordLabel},
+                   sortBy=${sortBy}, direction=${direction})}"
+                   th:text="${i + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${albums.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/albums(page=${albums.number + 1},
+                   title=${title}, recordLabel=${recordLabel},
+                   sortBy=${sortBy}, direction=${direction})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

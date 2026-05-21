@@ -42,9 +42,8 @@ public class Artist {
     @Column(length = 500)
     private String bio;
 
-    @NotNull
     @Column(nullable = false)
-    private Boolean active;
+    private Boolean active = false;
 
     @Column(nullable = false)
     private LocalDate createdAt = LocalDate.now();
