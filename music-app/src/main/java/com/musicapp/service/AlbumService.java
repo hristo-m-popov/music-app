@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.musicapp.model.Artist;
-import com.musicapp.repository.ArtistRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -24,17 +22,17 @@ public class AlbumService {
         return albumRepository.findByArtist_Id(artistId, pageable);
     }
 
-    public Page<Album> searchAlbums(String title, String recordLabel, Pageable pageable) {
+    public Page<Album> searchAlbums(String title, String artistName, Pageable pageable) {
         boolean hasTitle = title != null && !title.isBlank();
-        boolean hasLabel = recordLabel != null && !recordLabel.isBlank();
+        boolean hasName = artistName != null && !artistName.isBlank();
 
-        if (hasTitle && hasLabel) {
-            return albumRepository.findByTitleContainingIgnoreCaseAndRecordLabelContainingIgnoreCase(
-                    title, recordLabel, pageable);
+        if (hasTitle && hasName) {
+            return albumRepository.findByTitleContainingIgnoreCaseAndArtist_NameContainingIgnoreCase(
+                    title, artistName, pageable);
         } else if (hasTitle) {
             return albumRepository.findByTitleContainingIgnoreCase(title, pageable);
-        } else if (hasLabel) {
-            return albumRepository.findByRecordLabelContainingIgnoreCase(recordLabel, pageable);
+        } else if (hasName) {
+            return albumRepository.findByArtist_NameContainingIgnoreCase(artistName, pageable);
         } else {
             return albumRepository.findAll(pageable);
         }

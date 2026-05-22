@@ -27,9 +27,9 @@ public class ArtistApiController {
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(defaultValue = "asc") String direction) {
 
-        Sort sort = direction.equalsIgnoreCase("desc")
-                ? Sort.by(sortBy).descending()
-                : Sort.by(sortBy).ascending();
+        Sort sort;
+        if (direction.equalsIgnoreCase("desc")) sort = Sort.by(sortBy).descending();
+        else sort = Sort.by(sortBy).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
         return ResponseEntity.ok(artistService.searchArtists(genre, country, pageable));

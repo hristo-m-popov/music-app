@@ -1,5 +1,6 @@
 package com.musicapp.controller;
 
+import com.musicapp.model.Artist;
 import com.musicapp.model.Concert;
 import com.musicapp.service.ArtistService;
 import com.musicapp.service.ConcertService;
@@ -26,6 +27,7 @@ public class ConcertController {
     public String list(
             @RequestParam(defaultValue = "") String city,
             @RequestParam(defaultValue = "") String status,
+            @RequestParam(defaultValue = "") String artistName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "concertDateTime") String sortBy,
@@ -37,10 +39,11 @@ public class ConcertController {
                 : Sort.by(sortBy).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Concert> concerts = concertService.searchConcerts(city, status, pageable);
+        Page<Concert> concerts = concertService.searchConcerts(city, status, artistName, pageable);
 
         model.addAttribute("concerts", concerts);
         model.addAttribute("city", city);
+        model.addAttribute("artist", artistName);
         model.addAttribute("status", status);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("direction", direction);

@@ -21,7 +21,7 @@ public class AlbumApiController {
     @GetMapping
     public ResponseEntity<Page<Album>> getAll(
             @RequestParam(defaultValue = "") String title,
-            @RequestParam(defaultValue = "") String recordLabel,
+            @RequestParam(defaultValue = "") String artistName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "title") String sortBy,
@@ -32,7 +32,7 @@ public class AlbumApiController {
                 : Sort.by(sortBy).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
-        return ResponseEntity.ok(albumService.searchAlbums(title, recordLabel, pageable));
+        return ResponseEntity.ok(albumService.searchAlbums(title, artistName, pageable));
     }
 
     @GetMapping("/{id}")

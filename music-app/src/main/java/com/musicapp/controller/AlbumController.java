@@ -25,7 +25,7 @@ public class AlbumController {
     @GetMapping
     public String list(
             @RequestParam(defaultValue = "") String title,
-            @RequestParam(defaultValue = "") String recordLabel,
+            @RequestParam(defaultValue = "") String artistName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "title") String sortBy,
@@ -37,11 +37,11 @@ public class AlbumController {
                 : Sort.by(sortBy).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Album> albums = albumService.searchAlbums(title, recordLabel, pageable);
+        Page<Album> albums = albumService.searchAlbums(title, artistName, pageable);
 
         model.addAttribute("albums", albums);
         model.addAttribute("title", title);
-        model.addAttribute("recordLabel", recordLabel);
+        model.addAttribute("recordLabel", artistName);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("direction", direction);
         model.addAttribute("artists", artistService.getAllArtists(

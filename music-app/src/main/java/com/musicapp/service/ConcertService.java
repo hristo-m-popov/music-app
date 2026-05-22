@@ -25,17 +25,24 @@ public class ConcertService {
         return concertRepository.findByArtist_Id(artistId, pageable);
     }
 
-    public Page<Concert> searchConcerts(String city, String status, Pageable pageable) {
+    public Page<Concert> searchConcerts(String city, String status, String artistName, Pageable pageable) {
         boolean hasCity = city != null && !city.isBlank();
         boolean hasStatus = status != null && !status.isBlank();
+        boolean hasArtist = artistName != null && !artistName.isBlank();
 
         if (hasCity && hasStatus) {
             return concertRepository.findByCityContainingIgnoreCaseAndStatus(
                     city, status, pageable);
+        } else if(hasCity && hasArtist){
+            return concertRepository.findByCityContainingIgnoreCaseAndArtist_NameContainingIgnoreCase(city, artistName, pageable);
+        } else if(hasArtist && hasStatus){
+            return concertRepository.findByArtist_NameContainingIgnoreCaseAndStatus(artistName, status, pageable);
         } else if (hasCity) {
             return concertRepository.findByCityContainingIgnoreCase(city, pageable);
         } else if (hasStatus) {
             return concertRepository.findByStatus(status, pageable);
+        } else if(hasArtist){
+            return concertRepository.findByArtist_NameContainingIgnoreCase(artistName, pageable);
         } else {
             return concertRepository.findAll(pageable);
         }

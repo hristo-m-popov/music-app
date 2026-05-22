@@ -1,5 +1,6 @@
 package com.musicapp.controller;
 
+import com.musicapp.model.Artist;
 import com.musicapp.model.Concert;
 import com.musicapp.service.ConcertService;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ public class ConcertApiController {
     public ResponseEntity<Page<Concert>> getAll(
             @RequestParam(defaultValue = "") String city,
             @RequestParam(defaultValue = "") String status,
+            @RequestParam(defaultValue = "") String artistName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "concertDateTime") String sortBy,
@@ -32,7 +34,7 @@ public class ConcertApiController {
                 : Sort.by(sortBy).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
-        return ResponseEntity.ok(concertService.searchConcerts(city, status, pageable));
+        return ResponseEntity.ok(concertService.searchConcerts(city, status, artistName, pageable));
     }
 
     @GetMapping("/{id}")
