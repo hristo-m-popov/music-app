@@ -23,7 +23,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Concerts</h2>
-        <a href="/concerts/new" sec:authorize="hasRole('ADMIN')"
+        <a href="/concerts/new" sec:authorize="hasAuthority('ROLE_ADMIN')"
            class="btn btn-dark">+ Add Concert</a>
     </div>
 
@@ -73,7 +73,7 @@
                 <th>Ticket Price</th>
                 <th>Capacity</th>
                 <th>Status</th>
-                <th sec:authorize="hasRole('ADMIN')">Actions</th>
+                <th sec:authorize="hasAuthority('ROLE_ADMIN')">Actions</th>
             </tr>
             </thead>
             <tbody>
