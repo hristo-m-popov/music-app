@@ -41,7 +41,7 @@ public class AlbumController {
 
         model.addAttribute("albums", albums);
         model.addAttribute("title", title);
-        model.addAttribute("recordLabel", artistName);
+        model.addAttribute("artistName", artistName);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("direction", direction);
         model.addAttribute("artists", artistService.getAllArtists(
