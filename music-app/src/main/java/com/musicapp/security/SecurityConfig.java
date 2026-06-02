@@ -59,6 +59,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/login", "/register", "/css/**",
                                 "/js/**", "/webjars/**").permitAll()
+                        .requestMatchers("/api/artists", "/api/artists/**").permitAll()
                         .requestMatchers("/artists/new", "/artists/*/edit",
                                 "/artists/*/delete", "/artists/save").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/albums/new", "/albums/*/edit",
