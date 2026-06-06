@@ -14,9 +14,17 @@ public class RestPageImpl<T> extends PageImpl<T> {
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public RestPageImpl(
             @JsonProperty("content") List<T> content,
-            @JsonProperty("number") int page,
-            @JsonProperty("size") int size,
-            @JsonProperty("totalElements") long totalElements) {
-        super(content, PageRequest.of(page, size == 0 ? 10 : size), totalElements);
+            @JsonProperty("page") PageMetadata page) {
+        super(content, PageRequest.of(
+                        page != null ? page.number() : 0,
+                        page != null ? page.size() : 10),
+                page != null ? page.totalElements() : 0);
     }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public record PageMetadata(
+            @JsonProperty("size") int size,
+            @JsonProperty("number") int number,
+            @JsonProperty("totalElements") long totalElements,
+            @JsonProperty("totalPages") int totalPages) {}
 }

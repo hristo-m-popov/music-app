@@ -3,9 +3,12 @@ package com.musicapp.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "artists")
 public class Artist {

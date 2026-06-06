@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,12 +37,13 @@ public class ArtistController {
                 "&page=" + page + "&size=" + size +
                 "&sortBy=" + sortBy + "&direction=" + direction;
 
-        Page<Artist> artists = restTemplate.exchange(
+        org.springframework.http.ResponseEntity<RestPageImpl<Artist>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<RestPageImpl<Artist>>() {}
-        ).getBody();
+        );
+        Page<Artist> artists = response.getBody();
 
         model.addAttribute("artists", artists);
         model.addAttribute("genre", genre);

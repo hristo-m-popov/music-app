@@ -5,8 +5,10 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "albums")
 public class Album {

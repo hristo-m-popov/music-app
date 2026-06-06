@@ -57,16 +57,15 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/login", "/register", "/css/**",
                                 "/js/**", "/webjars/**").permitAll()
-                        .requestMatchers("/api/artists", "/api/artists/**").permitAll()
                         .requestMatchers("/artists/new", "/artists/*/edit",
                                 "/artists/*/delete", "/artists/save").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/albums/new", "/albums/*/edit",
                                 "/albums/*/delete", "/albums/save").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/concerts/new", "/concerts/*/edit",
                                 "/concerts/*/delete", "/concerts/save").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/api/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
